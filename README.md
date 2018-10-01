@@ -2,8 +2,8 @@
 A GDB mi adapter, that does rudamentary parsing
 
 ## Dependencies
-cmake
-tiny-process-library https://gitlab.com/eidheim/tiny-process-library/
+- 5cript/twisted-spirit https://github.com/5cript/twisted-spirit
+- tiny-process-library https://gitlab.com/eidheim/tiny-process-library/
 
 ## Usage Example
 ```C++

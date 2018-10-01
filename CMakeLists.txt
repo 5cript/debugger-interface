@@ -1,6 +1,17 @@
 # Version check
 cmake_minimum_required(VERSION 3.9)
 
+if(NOT "${CMAKE_CXX_STANDARD}")
+	set(CMAKE_CXX_STANDARD 17)
+endif()
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+if (NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
+  if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "" FORCE)
+  endif()
+endif()
+
 # Project
 project(gdbint VERSION 1.0.0 DESCRIPTION "a very basic gdb mi parser")
 
@@ -25,8 +36,8 @@ target_link_libraries(gdbint PRIVATE
 	"${LTINY_PROCESS_LIBRARY}"
 )
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -s -static-libstdc++ -static-libgcc")
-
 # Compiler Options
-target_compile_options(gdbint PRIVATE -fexceptions -std=c++17 -Wall -pedantic-errors -pedantic)
+set(DEBUG_OPTIONS -fexceptions -g -Wall -pedantic-errors -pedantic)
+set(RELEASE_OPTIONS -fexceptions -O3 -Wall -pedantic-errors -pedantic -s -static-libstdc++ -static-libgcc)
+target_compile_options(gdbint PUBLIC "$<$<CONFIG:DEBUG>:${DEBUG_OPTIONS}>")
+target_compile_options(gdbint PUBLIC "$<$<CONFIG:RELEASE>:${RELEASE_OPTIONS}>")
