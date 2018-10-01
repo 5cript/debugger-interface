@@ -33,8 +33,8 @@ int main()
     using namespace GdbInterface;
 
     Gdb debugger({
-        "D:/msys2/mingw64/bin/gdb.exe",
-        "D:/Development/IDE/debuggable/bin/Debug/debuggable.exe",
+        "C:/msys2/mingw64/bin/gdb.exe",
+        "debuggable.exe",
         std::nullopt,
         std::nullopt,
         std::nullopt,
