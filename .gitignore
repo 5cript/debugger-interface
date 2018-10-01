@@ -30,3 +30,15 @@
 *.exe
 *.out
 *.app
+
+bin/*
+build/*
+obj/*
+
+# CodeBlocks
+*.depend
+*.layout
+*_build_log.html
+*.cbp
+main.cpp
+test.txt
