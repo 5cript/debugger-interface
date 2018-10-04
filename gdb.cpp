@@ -112,13 +112,16 @@ namespace GdbInterface
                 true
             });
         }
-        impl_->process.reset(new Process{
-            constructCommand(),
-            path,
-            [this](char const* c, auto count){stdoutConsumer(std::string{c, count});},
-            [this](char const* c, auto count){stderrConsumer(std::string{c, count});},
-            true
-        });
+        else
+        {
+            impl_->process.reset(new Process{
+                constructCommand(),
+                path,
+                [this](char const* c, auto count){stdoutConsumer(std::string{c, count});},
+                [this](char const* c, auto count){stderrConsumer(std::string{c, count});},
+                true
+            });
+        }
     }
 //---------------------------------------------------------------------------------------------------------------------
     void Gdb::stdoutConsumer(std::string const& instream)

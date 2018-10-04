@@ -1,6 +1,8 @@
 # Version check
 cmake_minimum_required(VERSION 3.9)
 
+option(BUILD_SHARED "Build shared variant of library" OFF)
+
 if(NOT "${CMAKE_CXX_STANDARD}")
 	set(CMAKE_CXX_STANDARD 17)
 endif()
@@ -24,7 +26,11 @@ file(GLOB sources "*.cpp"
 )
 
 # Add library
-add_library(gdbint SHARED ${sources})
+if (BUILD_SHARED)
+	add_library(gdbint SHARED ${sources})
+else()
+	add_library(gdbint STATIC ${sources})
+endif()
 
 set_target_properties(gdbint PROPERTIES VERSION ${PROJECT_VERSION})
 
