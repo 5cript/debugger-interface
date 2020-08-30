@@ -1,6 +1,6 @@
 #pragma once
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Value;
     struct Tuple;

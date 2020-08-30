@@ -6,7 +6,7 @@
 #include <vector>
 #include <boost/optional.hpp>
 
-namespace GdbInterface::RawData
+namespace DebuggerInterface::RawData
 {
     struct ResultRecord
     {
@@ -24,12 +24,12 @@ namespace GdbInterface::RawData
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    GdbInterface::RawData::ResultRecord,
+    DebuggerInterface::RawData::ResultRecord,
     status, results
 )
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    GdbInterface::RawData::Input,
+    DebuggerInterface::RawData::Input,
     outOfBand, resultRecord, complete
 )

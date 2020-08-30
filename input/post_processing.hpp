@@ -10,10 +10,10 @@
 #include "list.hpp"
 #include "response.hpp"
 
-namespace GdbInterface::detail
+namespace DebuggerInterface::detail
 {
-    GdbInterface::StreamRecord convertStreamRecord(RawData::StreamRecord const& record);
-    std::unique_ptr <GdbInterface::Value> makeValue(RawData::Result const& raw);
-    GdbInterface::AsyncRecord convertAsyncRecord(RawData::OutOfBand const& record);
+    DebuggerInterface::StreamRecord convertStreamRecord(RawData::StreamRecord const& record);
+    std::unique_ptr <DebuggerInterface::Value> makeValue(RawData::Result const& raw);
+    DebuggerInterface::AsyncRecord convertAsyncRecord(RawData::OutOfBand const& record);
     Response postProcess(RawData::Input const& raw);
 }

@@ -4,7 +4,7 @@
 
 #include <optional>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Command
     {

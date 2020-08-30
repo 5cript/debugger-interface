@@ -2,7 +2,7 @@
 
 #include <tiny-process-library/process.hpp>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     using Process = TinyProcessLib::Process;
 }

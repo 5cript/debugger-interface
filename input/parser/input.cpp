@@ -1,6 +1,6 @@
 #include "input.hpp"
 
-namespace GdbInterface::Grammars
+namespace DebuggerInterface::Grammars
 {
     using namespace TwistedSpirit;
 

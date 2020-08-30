@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     enum class ResultStatus
     {

@@ -6,7 +6,7 @@
 #include <vector>
 #include <optional>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Response
     {

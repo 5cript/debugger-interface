@@ -1,22 +1,15 @@
 #pragma once
 
+#include "common_arguments.hpp"
+
 #include <memory>
 #include <optional>
 #include <unordered_map>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
-    struct GdbRunArguments
+    struct GdbRunArguments : CommonRunArguments
     {
-        /// What gdb to use.
-        std::string gdbFullPath;
-
-        /// The program to debug
-        std::string program;
-
-        /// The execution directory we are in.
-        std::optional <std::string> directory = std::nullopt;
-
         /// A PID if we want to attach to a running process.
         std::optional <int> pid = std::nullopt;
 
@@ -50,9 +43,6 @@ namespace GdbInterface
         /// gdb --data-directory -D
         std::optional <std::string> gdbDataDirectory = std::nullopt;
 
-        /// Specify environment variables with this.
-        std::optional <std::unordered_map <std::string, std::string>> environment = std::nullopt;
-
         /// gdb --init-command
         std::optional <std::string> initCommandFile = std::nullopt;
 
@@ -70,7 +60,7 @@ namespace GdbInterface
 #ifdef BOOST_FUSION_ADAPT_STRUCT
 BOOST_FUSION_ADAPT_STRUCT
 (
-    GdbInterface::GdbRunArguments,
+    DebuggerInterface::GdbRunArguments,
     gdbFullPath, program, directory, pid, args, core, sourceDirectory, symbols,
     fullyReadSymbols, neverReadSymbols, write, quiet, returnChildResult, gdbDataDirectory, environment,
     initCommandFile, commandFile, ignoreHomeGdbInit, ignoreAllGdbInit

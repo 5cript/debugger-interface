@@ -1,11 +1,11 @@
 #include "post_processing.hpp"
 
-namespace GdbInterface::detail
+namespace DebuggerInterface::detail
 {
 //#####################################################################################################################
-    GdbInterface::StreamRecord convertStreamRecord(RawData::StreamRecord const& record)
+    DebuggerInterface::StreamRecord convertStreamRecord(RawData::StreamRecord const& record)
     {
-        GdbInterface::StreamRecord result;
+        DebuggerInterface::StreamRecord result;
         switch (record.type)
         {
             case('~'): {result.type = StreamRecordType::Console; break;}
@@ -16,7 +16,7 @@ namespace GdbInterface::detail
         return result;
     }
 //---------------------------------------------------------------------------------------------------------------------
-    std::unique_ptr <GdbInterface::Value> makeValue(RawData::Result const& raw)
+    std::unique_ptr <DebuggerInterface::Value> makeValue(RawData::Result const& raw)
     {
         std::unique_ptr <Value> value;
 
@@ -55,9 +55,9 @@ namespace GdbInterface::detail
         }
     }
 //---------------------------------------------------------------------------------------------------------------------
-    GdbInterface::AsyncRecord convertAsyncRecord(RawData::OutOfBand const& record)
+    DebuggerInterface::AsyncRecord convertAsyncRecord(RawData::OutOfBand const& record)
     {
-        GdbInterface::AsyncRecord result;
+        DebuggerInterface::AsyncRecord result;
 
         if (record.token)
             result.token = record.token.get();

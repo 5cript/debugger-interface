@@ -19,7 +19,7 @@ A GDB mi adapter, that does rudamentary parsing
 #include <iostream>
 #include <string>
 
-struct MyListener : public GdbInterface::PickyListener
+struct MyListener : public DebuggerInterface::PickyListener
 {
     void onRawData(std::string const& raw) override
     {
@@ -30,9 +30,9 @@ struct MyListener : public GdbInterface::PickyListener
 
 int main()
 {
-    using namespace GdbInterface;
+    using namespace DebuggerInterface;
 
-    Gdb debugger({
+    Debugger debugger({
         "C:/msys2/mingw64/bin/gdb.exe",
         "debuggable.exe",
         std::nullopt,

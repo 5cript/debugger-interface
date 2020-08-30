@@ -8,7 +8,7 @@
 #include "twisted-spirit/core/parser_core.hpp"
 #include "twisted-spirit/rules/space.hpp"
 
-namespace GdbInterface::Grammars
+namespace DebuggerInterface::Grammars
 {
     using namespace TwistedSpirit;
 

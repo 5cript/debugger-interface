@@ -4,7 +4,7 @@
 #include <string>
 #include <optional>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     using Option = std::pair <std::string, std::optional <std::string>>;
     using OptionList = std::unordered_map <std::string, std::optional <std::string>>;

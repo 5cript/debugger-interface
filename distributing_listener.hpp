@@ -1,8 +1,8 @@
 #pragma once
 
-#include "gdb_interface.hpp"
+#include "debugger_interface.hpp"
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     class DistributingListener : public ListenerInterface
     {

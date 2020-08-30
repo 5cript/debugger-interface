@@ -16,7 +16,7 @@
 #include <vector>
 #include <string>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     namespace GdbMiCommands
     {

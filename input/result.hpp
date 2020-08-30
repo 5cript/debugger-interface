@@ -4,7 +4,7 @@
 
 #include <string>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Result : public Value
     {

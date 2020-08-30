@@ -5,7 +5,7 @@
 #include "twisted-spirit/core/parser_core.hpp"
 #include "twisted-spirit/grammars/unescaped_string.hpp"
 
-namespace GdbInterface::Grammars
+namespace DebuggerInterface::Grammars
 {
     using namespace TwistedSpirit;
 

@@ -9,7 +9,7 @@
 
 // NO FUNCTIONS HERE, UNLESS EXPORTED
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     enum class AsyncRecordType
     {

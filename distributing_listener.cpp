@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     #define DISTRIBUTE(FNAME, PARAM) \
         [&, this](){ \

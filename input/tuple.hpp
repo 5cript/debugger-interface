@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Tuple : public Value
     {

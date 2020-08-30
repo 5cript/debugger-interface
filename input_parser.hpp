@@ -3,7 +3,7 @@
 #include "input/response.hpp"
 #include "input/raw/input.hpp"
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     namespace detail
     {

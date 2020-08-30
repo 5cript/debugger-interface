@@ -5,7 +5,7 @@
 
 #include <boost/optional.hpp>
 
-namespace GdbInterface::RawData
+namespace DebuggerInterface::RawData
 {
     struct StreamRecord
     {
@@ -27,12 +27,12 @@ namespace GdbInterface::RawData
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    GdbInterface::RawData::StreamRecord,
+    DebuggerInterface::RawData::StreamRecord,
     type, value, wasSet
 )
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    GdbInterface::RawData::OutOfBand,
+    DebuggerInterface::RawData::OutOfBand,
     token, type, asyncClass, results, streamRecord
 )

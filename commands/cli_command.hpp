@@ -2,7 +2,7 @@
 
 #include "command.hpp"
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct CliCommand
         : public Command

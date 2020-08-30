@@ -1,28 +1,38 @@
 #pragma once
 
 #include "gdb_run_arguments.hpp"
+#include "lldb_run_arguments.hpp"
 
 #include "dll.hpp"
-#include "gdb_interface.hpp"
+#include "debugger_interface.hpp"
 #include "commands/mi_command.hpp"
 
-namespace GdbInterface
-{
-    struct GdbImpl;
+#include <variant>
 
-    class GDBI_DLL_EXPORT Gdb
+namespace DebuggerInterface
+{
+    struct DebuggerImpl;
+
+    struct UserDefinedArguments : CommonRunArguments
+    {
+        std::string commandline;
+    };
+
+    class DBG_DLL_EXPORT Debugger
     {
     public:
         /**
          *  Initialize everything. Does not call the process but memorizes it for the call.
          */
-        Gdb(GdbRunArguments args);
-        ~Gdb();
+        Debugger(GdbRunArguments args);
+        Debugger(LldbRunArguments args);
+        Debugger(UserDefinedArguments args);
+        ~Debugger();
 
-        Gdb(Gdb const&) = delete;
-        Gdb(Gdb&&) = default;
-        Gdb& operator=(Gdb const&) = delete;
-        Gdb& operator=(Gdb&&) = default;
+        Debugger(Debugger const&) = delete;
+        Debugger(Debugger&&) = default;
+        Debugger& operator=(Debugger const&) = delete;
+        Debugger& operator=(Debugger&&) = default;
 
         /**
          *  Send a custom command to gdb, that is not implemented directly.
@@ -56,13 +66,20 @@ namespace GdbInterface
         void registerListener(ListenerInterface* listener);
 
     private:
-        std::string constructCommand();
+        std::string constructCommand(GdbRunArguments const& args) const;
+        std::string constructCommand(LldbRunArguments const& args) const;
+        std::string constructCommand(UserDefinedArguments const& args) const;
+        std::string constructCommand() const;
 
         void stdoutConsumer(std::string const& instream);
         void stderrConsumer(std::string const& instream);
 
     private:
-        GdbRunArguments args_;
-        std::unique_ptr <GdbImpl> impl_;
+        std::variant <
+            GdbRunArguments,
+            LldbRunArguments,
+            UserDefinedArguments
+        > args_;
+        std::unique_ptr <DebuggerImpl> impl_;
     };
 }

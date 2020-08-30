@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <functional>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
 //#####################################################################################################################
     template <typename T>

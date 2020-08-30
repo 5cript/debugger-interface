@@ -2,7 +2,7 @@
 
 #include "../../adapt.hpp"
 
-namespace GdbInterface::RawData
+namespace DebuggerInterface::RawData
 {
     struct Result
     {
@@ -21,6 +21,6 @@ namespace GdbInterface::RawData
 
 BOOST_FUSION_ADAPT_STRUCT
 (
-    GdbInterface::RawData::Result,
+    DebuggerInterface::RawData::Result,
     variable, value, tupleValue, listValue, valueSet, tupleSet, listSet
 )

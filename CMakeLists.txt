@@ -15,7 +15,7 @@ if (NOT EXISTS ${CMAKE_BINARY_DIR}/CMakeCache.txt)
 endif()
 
 # Project
-project(gdbint VERSION 1.0.0 DESCRIPTION "a very basic gdb mi parser")
+project(dbgint VERSION 1.0.0 DESCRIPTION "a very basic gdb/lldb mi parser")
 
 # Add files
 file(GLOB sources "*.cpp"
@@ -27,23 +27,23 @@ file(GLOB sources "*.cpp"
 
 # Add library
 if (BUILD_SHARED)
-	add_library(gdbint SHARED ${sources})
+	add_library(${PROJECT_NAME} SHARED ${sources})
 else()
-	add_library(gdbint STATIC ${sources})
+	add_library(${PROJECT_NAME} STATIC ${sources})
 endif()
 
-set_target_properties(gdbint PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 
-target_include_directories(gdbint PRIVATE "..")
+target_include_directories(${PROJECT_NAME} PRIVATE "..")
 
 find_library(LTINY_PROCESS_LIBRARY tiny-process-library PATHS "../tiny-process-library/build")
 
-target_link_libraries(gdbint PRIVATE 
+target_link_libraries(${PROJECT_NAME} PRIVATE 
 	"${LTINY_PROCESS_LIBRARY}"
 )
 
 # Compiler Options
 set(DEBUG_OPTIONS -fexceptions -g -Wall -pedantic-errors -pedantic)
 set(RELEASE_OPTIONS -fexceptions -O3 -Wall -pedantic-errors -pedantic -s -static-libstdc++ -static-libgcc)
-target_compile_options(gdbint PUBLIC "$<$<CONFIG:DEBUG>:${DEBUG_OPTIONS}>")
-target_compile_options(gdbint PUBLIC "$<$<CONFIG:RELEASE>:${RELEASE_OPTIONS}>")
+target_compile_options(${PROJECT_NAME} PUBLIC "$<$<CONFIG:DEBUG>:${DEBUG_OPTIONS}>")
+target_compile_options(${PROJECT_NAME} PUBLIC "$<$<CONFIG:RELEASE>:${RELEASE_OPTIONS}>")

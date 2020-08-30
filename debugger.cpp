@@ -1,4 +1,4 @@
-#include "gdb.hpp"
+#include "debugger.hpp"
 
 #include "process/process.hpp"
 #include "input_parser.hpp"
@@ -10,121 +10,166 @@
 #include <string>
 #include <iostream>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
 //#####################################################################################################################
-    struct GdbImpl
+    struct DebuggerImpl
     {
         std::unique_ptr <Process> process;
         std::vector <ListenerInterface*> listeners;
         DistributingListener distributor;
 
-        GdbImpl()
+        DebuggerImpl()
             : process{}
             , listeners{}
             , distributor{&listeners}
         {
 
         }
-        ~GdbImpl() = default;
+        ~DebuggerImpl() = default;
     };
 //#####################################################################################################################
-    Gdb::Gdb(GdbRunArguments args)
+    Debugger::Debugger(GdbRunArguments args)
         : args_{std::move(args)}
-        , impl_{new GdbImpl}
+        , impl_{new DebuggerImpl}
+    {
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    Debugger::Debugger(LldbRunArguments args)
+        : args_{std::move(args)}
+        , impl_{new DebuggerImpl}
+    {
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    Debugger::Debugger(UserDefinedArguments args)
+        : args_{std::move(args)}
+        , impl_{new DebuggerImpl}
     {
 
     }
 //---------------------------------------------------------------------------------------------------------------------
-    Gdb::~Gdb() = default;
+    Debugger::~Debugger() = default;
 //---------------------------------------------------------------------------------------------------------------------
-    std::string Gdb::constructCommand()
+    std::string Debugger::constructCommand(GdbRunArguments const& args) const
     {
         std::stringstream command;
 
         // gdb executable
-        command << args_.gdbFullPath <<  ' ';
+        command << args.debuggerExecuteable <<  ' ';
 
         // options
-        if (args_.sourceDirectory)
-            command << "--directory=" << args_.sourceDirectory.value() << ' ';
-        if (args_.symbols)
-            command << "--symbols=" << args_.symbols.value() << ' ';
-        if (args_.fullyReadSymbols)
+        if (args.sourceDirectory)
+            command << "--directory=" << args.sourceDirectory.value() << ' ';
+        if (args.symbols)
+            command << "--symbols=" << args.symbols.value() << ' ';
+        if (args.fullyReadSymbols)
             command << "--readnow ";
-        if (args_.neverReadSymbols)
+        if (args.neverReadSymbols)
             command << "--readnever ";
-        if (args_.write)
+        if (args.write)
             command << "--write ";
 
-        if (args_.initCommandFile)
-            command << "--init-command=" << args_.initCommandFile.value() << ' ';
-        if (args_.commandFile)
-            command << "--command=" << args_.commandFile.value() << ' ';
-        if (args_.ignoreHomeGdbInit)
+        if (args.initCommandFile)
+            command << "--init-command=" << args.initCommandFile.value() << ' ';
+        if (args.commandFile)
+            command << "--command=" << args.commandFile.value() << ' ';
+        if (args.ignoreHomeGdbInit)
             command << "--nh ";
-        if (args_.ignoreAllGdbInit)
+        if (args.ignoreAllGdbInit)
             command << "--nx ";
 
-        if (args_.returnChildResult)
+        if (args.returnChildResult)
             command << "--return-child-result ";
-        if (args_.quiet)
+        if (args.quiet)
             command << "-q ";
-        if (args_.gdbDataDirectory)
-            command << "--data-directory=" << args_.gdbDataDirectory.value() << ' ';
+        if (args.gdbDataDirectory)
+            command << "--data-directory=" << args.gdbDataDirectory.value() << ' ';
 
         // gdb mi
         command << "--interpreter=mi ";
 
         // args
-        if (args_.args)
+        if (args.args)
             command << "--args ";
 
         // executable
-        command << args_.program << ' ';
+        if (args.program)
+            command << args.program.value() << ' ';
 
-        if (args_.args)
-            command << args_.args.value();
+        if (args.args)
+            command << args.args.value();
         else
         {
             // core dump or pid
-            if (args_.core)
-                command << args_.core.value();
-            else if (args_.pid)
-                command << args_.pid.value();
+            if (args.core)
+                command << args.core.value();
+            else if (args.pid)
+                command << args.pid.value();
         }
 
         return command.str();
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::start()
+    std::string Debugger::constructCommand(LldbRunArguments const& args) const
     {
-        std::string path = args_.directory ? args_.directory.value() : "";
+        std::stringstream command;
 
-        if (args_.environment)
-        {
-            impl_->process.reset(new Process{
-                constructCommand(),
-                args_.environment.value(),
-                path,
-                [this](char const* c, auto count){stdoutConsumer(std::string{c, count});},
-                [this](char const* c, auto count){stderrConsumer(std::string{c, count});},
-                true
-            });
-        }
-        else
-        {
-            impl_->process.reset(new Process{
-                constructCommand(),
-                path,
-                [this](char const* c, auto count){stdoutConsumer(std::string{c, count});},
-                [this](char const* c, auto count){stderrConsumer(std::string{c, count});},
-                true
-            });
-        }
+        // gdb executable
+        command << args.debuggerExecuteable <<  ' ';
+
+        if (args.program)
+            command << args.program.value() << ' ';
+
+        return command.str();
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::stdoutConsumer(std::string const& instream)
+    std::string Debugger::constructCommand(UserDefinedArguments const& args) const
+    {
+        return args.debuggerExecuteable + " " + args.commandline;
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    std::string Debugger::constructCommand() const
+    {
+        std::string res;
+        std::visit([this, &res](auto const& args) {
+            res = constructCommand(args);
+        }, args_);
+        return res;
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    void Debugger::start()
+    {
+        std::visit([this](auto const& args)
+        {
+            std::string path = args.directory ? args.directory.value() : "";
+
+            std::cout << constructCommand() << "\n";
+
+            if (args.environment)
+            {
+                impl_->process.reset(new Process{
+                    constructCommand(),
+                    path,
+                    args.environment.value(),
+                    [this](char const* c, auto count){stdoutConsumer(std::string{c, count});},
+                    [this](char const* c, auto count){stderrConsumer(std::string{c, count});},
+                    true
+                });
+            }
+            else
+            {
+                impl_->process.reset(new Process{
+                    constructCommand(),
+                    path,
+                    [this](char const* c, auto count){stdoutConsumer(std::string{c, count});},
+                    [this](char const* c, auto count){stderrConsumer(std::string{c, count});},
+                    true
+                });
+            }
+        }, args_);
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    void Debugger::stdoutConsumer(std::string const& instream)
     {
         auto& sender = impl_->distributor;
         sender.onRawData(instream);
@@ -204,33 +249,33 @@ namespace GdbInterface
         }
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::stderrConsumer(std::string const& instream)
+    void Debugger::stderrConsumer(std::string const& instream)
     {
         impl_->distributor.onStdErr(instream);
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::registerListener(ListenerInterface* listener)
+    void Debugger::registerListener(ListenerInterface* listener)
     {
         impl_->listeners.push_back(listener);
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::sendCommand(MiCommand const& command)
+    void Debugger::sendCommand(MiCommand const& command)
     {
         auto com = synthesize(command);
         impl_->process->write(com);
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::stop()
+    void Debugger::stop()
     {
-        sendCommand(MiCommand{"-gdb-exit"});
+        sendCommand(MiCommand{"quit"});
     }
 //---------------------------------------------------------------------------------------------------------------------
-    long long Gdb::waitForProcess() const
+    long long Debugger::waitForProcess() const
     {
         return impl_->process->get_exit_status();
     }
 //---------------------------------------------------------------------------------------------------------------------
-    void Gdb::forceKill()
+    void Debugger::forceKill()
     {
         impl_->process->kill(true);
     }

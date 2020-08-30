@@ -2,7 +2,7 @@
 
 #include <mplex/string/string.hpp>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Operations
     {

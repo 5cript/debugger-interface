@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct ListenerInterface
     {

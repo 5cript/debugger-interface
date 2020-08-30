@@ -3,8 +3,9 @@
 #include "result_forward.hpp"
 
 #include <memory>
+#include <string>
 
-namespace GdbInterface
+namespace DebuggerInterface
 {
     struct Value
     {
