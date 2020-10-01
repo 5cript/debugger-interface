@@ -48,9 +48,9 @@ namespace DebuggerInterface::Grammars
 
             value =
                     (
-                            c_string                [at_c <1> (qi::_val) = qi::_1, at_c<4> (qi::_val) = true]
-                        |   tuple                   [at_c <2> (qi::_val) = qi::_1, at_c<5> (qi::_val) = true]
-                        |   list                    [at_c <3> (qi::_val) = qi::_1, at_c<6> (qi::_val) = true]
+                            c_string                [(at_c <1> (qi::_val) = qi::_1, at_c<4> (qi::_val) = true)]
+                        |   tuple                   [(at_c <2> (qi::_val) = qi::_1, at_c<5> (qi::_val) = true)]
+                        |   list                    [(at_c <3> (qi::_val) = qi::_1, at_c<6> (qi::_val) = true)]
                     )
             ;
 
@@ -58,9 +58,9 @@ namespace DebuggerInterface::Grammars
                    +(qi::char_ - qi::char_('='))    [phoenix::push_back(at_c <0> (qi::_val), qi::_1)]
                 >>  qi::char_('=')
                 >>  (
-                            c_string                [at_c <1> (qi::_val) = qi::_1, at_c<4> (qi::_val) = true]
-                        |   tuple                   [at_c <2> (qi::_val) = qi::_1, at_c<5> (qi::_val) = true]
-                        |   list                    [at_c <3> (qi::_val) = qi::_1, at_c<6> (qi::_val) = true]
+                            c_string                [(at_c <1> (qi::_val) = qi::_1, at_c<4> (qi::_val) = true)]
+                        |   tuple                   [(at_c <2> (qi::_val) = qi::_1, at_c<5> (qi::_val) = true)]
+                        |   list                    [(at_c <3> (qi::_val) = qi::_1, at_c<6> (qi::_val) = true)]
                     )
             ;
 

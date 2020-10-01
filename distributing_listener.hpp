@@ -20,6 +20,7 @@ namespace DebuggerInterface
         void onLogStream(std::string const& message) override;
         void onParserError(std::string const& message) override;
         void onRawData(std::string const& raw) override;
+        void onPartialRemain(std::string const& remain, std::string const& subject) override;
 
     private:
         std::vector <ListenerInterface*> const* listeners_;

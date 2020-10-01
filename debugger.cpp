@@ -10,6 +10,8 @@
 #include <string>
 #include <iostream>
 
+using namespace std::string_literals;
+
 namespace DebuggerInterface
 {
 //#####################################################################################################################
@@ -125,7 +127,12 @@ namespace DebuggerInterface
 //---------------------------------------------------------------------------------------------------------------------
     std::string Debugger::constructCommand(UserDefinedArguments const& args) const
     {
-        return args.debuggerExecuteable + " " + args.commandline;
+        std::string com = args.debuggerExecuteable;
+        if (args.program)
+            com += " "s + args.program.value();
+        com += " --interpreter=mi ";
+        com += args.commandline;
+        return com;
     }
 //---------------------------------------------------------------------------------------------------------------------
     std::string Debugger::constructCommand() const
@@ -169,6 +176,11 @@ namespace DebuggerInterface
         }, args_);
     }
 //---------------------------------------------------------------------------------------------------------------------
+    void Debugger::feed(std::string const& str)
+    {
+        stdoutConsumer(str);
+    }
+//---------------------------------------------------------------------------------------------------------------------
     void Debugger::stdoutConsumer(std::string const& instream)
     {
         auto& sender = impl_->distributor;
@@ -177,12 +189,12 @@ namespace DebuggerInterface
         try
         {
             bool partialParse = false;
+            int amountConsumed = 0;
 
-            auto message = parse(instream, partialParse);
+            auto message = parse(instream, partialParse, amountConsumed);
             if (partialParse)
             {
-                sender.onParserError("message was parsed only partially, which is a hard error");
-                return;
+                sender.onPartialRemain(instream.substr(amountConsumed, instream.size() - amountConsumed), instream);
             }
 
             if (message.result)
@@ -262,7 +274,13 @@ namespace DebuggerInterface
     void Debugger::sendCommand(MiCommand const& command)
     {
         auto com = synthesize(command);
+        std::cout << "synthesized command: " << com << "\n";
         impl_->process->write(com);
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    void Debugger::sendCommand(std::string const& command)
+    {
+        impl_->process->write(command);
     }
 //---------------------------------------------------------------------------------------------------------------------
     void Debugger::stop()

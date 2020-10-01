@@ -4,7 +4,7 @@
 
 namespace DebuggerInterface
 {
-    #define DISTRIBUTE(FNAME, PARAM) \
+    #define DISTRIBUTE(FNAME, ...) \
         [&, this](){ \
         if (listeners_ == nullptr) \
         { \
@@ -13,7 +13,7 @@ namespace DebuggerInterface
         for (auto const& i : *listeners_) \
         { \
             if (i != nullptr) \
-                i-> FNAME (PARAM); \
+                i-> FNAME (__VA_ARGS__); \
         }}()
 //#####################################################################################################################
     DistributingListener::DistributingListener(std::vector <ListenerInterface*> const* listeners)
@@ -69,6 +69,11 @@ namespace DebuggerInterface
     void DistributingListener::onResult(ResultRecord const& result)
     {
         DISTRIBUTE(onResult, result);
+    }
+//---------------------------------------------------------------------------------------------------------------------
+    void DistributingListener::onPartialRemain(std::string const& remaining, std::string const& subject)
+    {
+        DISTRIBUTE(onPartialRemain, remaining, subject);
     }
 //#####################################################################################################################
 }

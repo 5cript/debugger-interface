@@ -53,22 +53,27 @@ namespace DebuggerInterface
         }
     }
 //#####################################################################################################################
-    Response parse(std::string const& input, bool& partial)
+    Response parse(std::string const& input, bool& partial, int& amountConsumed)
     {
         TYPEDEF_GRAMMAR(Grammars::InputGrammar);
 
-        auto [error, value] = TwistedSpirit::parse <grammar> (input);
-        if (error == TwistedSpirit::ParsingResult::FAIL)
+        auto [range, value] = TwistedSpirit::parse <grammar> (input);
+        if (range == TwistedSpirit::ParsingResult::FAIL)
         {
             throw std::runtime_error("parsing failed");
-
         }
         else
         {
-            if (error == TwistedSpirit::ParsingResult::PARTIAL)
-                partial = true;
-            else
+            if (range == TwistedSpirit::ParsingResult::FULL_SUCCESS)
+            {
+                amountConsumed = input.size();
                 partial = false;
+            }
+            else
+            {
+                amountConsumed = (int)range;
+                partial = true;
+            }
             return detail::postProcess(value);
         }
     }

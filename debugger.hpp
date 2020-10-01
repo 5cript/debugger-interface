@@ -40,6 +40,11 @@ namespace DebuggerInterface
         void sendCommand(MiCommand const& command);
 
         /**
+         *  Send a command, but raw as string.
+         */
+        void sendCommand(std::string const& command);
+
+        /**
          *  Start the gdb debugger and start listening for input.
          */
         void start();
@@ -64,6 +69,11 @@ namespace DebuggerInterface
          *  @param interface The ownership of this class is not aquired and lifetime has to exceed this class' lifetime.
          */
         void registerListener(ListenerInterface* listener);
+
+        /**
+         *  Feeds data into the debugger, as if it was recieved by stdout.
+         */
+        void feed(std::string const& str);
 
     private:
         std::string constructCommand(GdbRunArguments const& args) const;

@@ -1,5 +1,7 @@
 #include "post_processing.hpp"
 
+#include <iostream>
+
 namespace DebuggerInterface::detail
 {
 //#####################################################################################################################

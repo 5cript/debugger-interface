@@ -163,7 +163,7 @@ namespace DebuggerInterface
                 sstr << ' ' << param;
             }
         }
-        sstr << "\r\n";
+        sstr << "\n";
 
         return sstr.str();
     }

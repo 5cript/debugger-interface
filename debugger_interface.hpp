@@ -27,6 +27,7 @@ namespace DebuggerInterface
         virtual void onParserError(std::string const& message) = 0;
 
         virtual void onRawData(std::string const& raw) = 0;
+        virtual void onPartialRemain(std::string const& remaninig, std::string const& subject) = 0;
 
         virtual ~ListenerInterface() = default;
     };
@@ -50,6 +51,7 @@ namespace DebuggerInterface
         void onParserError(std::string const& message) override {}
 
         void onRawData(std::string const& raw) override {}
+        void onPartialRemain(std::string const& remaninig, std::string const& subject) {};
     };
 
 

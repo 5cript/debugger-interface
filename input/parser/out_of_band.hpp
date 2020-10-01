@@ -31,7 +31,7 @@ namespace DebuggerInterface::Grammars
                 >>  qi::char_("*+=")                [at_c <1> (qi::_val) = qi::_1]
 
                 // class
-                >>  async_class                     [at_c <2> (qi::_val) = qi::_1]
+                >   async_class                     [at_c <2> (qi::_val) = qi::_1]
 
                 // results
                 >> *(qi::char_(',') >> result       [phoenix::push_back(at_c <3> (qi::_val), qi::_1)])
@@ -52,7 +52,7 @@ namespace DebuggerInterface::Grammars
                 (       async_record                    [qi::_val = qi::_1]
                     |   stream_record                   [at_c <4> (qi::_val) = qi::_1]
                 )
-                >>  linebreak
+                >   linebreak
             ;
 
             main = out_of_band_record;

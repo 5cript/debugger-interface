@@ -22,7 +22,6 @@ namespace DebuggerInterface::Grammars
         InputGrammar() : InputGrammar::base_type(main, "input")
         {
             using namespace common_usings;
-            INSTALL_ERROR_HANDLER;
 
             record =
                     qi::char_('^')
@@ -34,6 +33,7 @@ namespace DebuggerInterface::Grammars
                         |   qi::lit("exit")             [at_c <0> (qi::_val) = "exit"]
                     )
                 >> *(qi::char_(',') >> result [phoenix::push_back(at_c <1> (qi::_val), qi::_1)])
+                >> linebreak
             ;
 
             main =
@@ -41,11 +41,10 @@ namespace DebuggerInterface::Grammars
                 >> -record              [at_c <1> (qi::_val) = qi::_1]
                 >> -(
                            qi::lit("(gdb)")
+                        >> *space
                         >> linebreak
                     )                   [at_c <2> (qi::_val) = true]
             ;
-
-            HANDLE_QI_ERROR(main, 1);
         }
 
         // Rules

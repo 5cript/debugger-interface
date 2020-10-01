@@ -9,5 +9,5 @@ namespace DebuggerInterface
     {
         Response postProcess(RawData::Input const& raw);
     }
-    Response parse(std::string const& input, bool& partial);
+    Response parse(std::string const& input, bool& partial, int& amountConsumed);
 }
