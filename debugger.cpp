@@ -176,6 +176,16 @@ namespace DebuggerInterface
         }, args_);
     }
 //---------------------------------------------------------------------------------------------------------------------
+    std::optional<long long> Debugger::tryGetExitStatus() const
+    {
+        if (!impl_->process)
+            return std::nullopt;
+        int status = -100'000;
+        if (!impl_->process->try_get_exit_status(status))
+            return std::nullopt;
+        return static_cast <long long>(status);
+    }
+//---------------------------------------------------------------------------------------------------------------------
     void Debugger::feed(std::string const& str)
     {
         stdoutConsumer(str);

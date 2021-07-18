@@ -8,6 +8,7 @@
 #include "commands/mi_command.hpp"
 
 #include <variant>
+#include <optional>
 
 namespace DebuggerInterface
 {
@@ -63,6 +64,11 @@ namespace DebuggerInterface
          *  waits for gdb to terminate and return exit code.
          */
         long long waitForProcess() const;
+
+        /**
+         *  Returns the exit status of the sub process or noting if the debugger is still running.
+         */
+        std::optional<long long> tryGetExitStatus() const;
 
         /**
          *  Register a listener that will receive all the output comming from gdb
